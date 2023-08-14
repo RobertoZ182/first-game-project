@@ -95,6 +95,10 @@ class Coins{
         const board = document.getElementById("board");
         board.appendChild(this.domElement);
     }
+    moveToLeft(){
+        this.positionX -= 2;
+        this.domElement.style.left = this.positionX + "vw";
+    }
 }
 
 class Game{
@@ -104,15 +108,18 @@ class Game{
         this.coins = [];
         this.backgroundX = 0;
         this.background = document.getElementById("board");
-        this.main = null;
     }
     start(){
         this.attachEventListeners();
-        
 
          setInterval(() =>{
             const obstacle = new Obstacles();
-            this.obstacles.push(obstacle);
+            this.obstacles.push(obstacle);            
+        }, 3000);
+
+        setInterval(() => {
+            const coin = new Coins();
+            this.coins.push(coin);
         }, 3000);
 
          setInterval(() => {
@@ -121,11 +128,17 @@ class Game{
             this.removeObstacleIfOutside(elem);
             this.detectCollision(elem);
           });
-
           this.backgroundX -= 1;
           this.background.style.backgroundPosition = this.backgroundX + "vw 0";
         }, 100);
-       
+
+        setInterval(() => {
+           this.coins.forEach((coi) => {
+            coi.moveToLeft();
+            this.removeObstacleIfOutside(coi);
+            });
+        }, 100)
+
     }
     attachEventListeners() {
         document.addEventListener("keydown", (event) => {
@@ -155,9 +168,7 @@ class Game{
             this.player.positionY < obstacleInstance.positionY + obstacleInstance.height &&
             this.player.positionY + this.player.height > obstacleInstance.positionY
         ) {
-            // Collision detected!
-
-            //location.href = "./gameover.html";
+            console.log("collision");
         }
     }
 }
