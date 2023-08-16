@@ -268,6 +268,8 @@ class Game {
           clearInterval(this.fourth);
           this.gameIsOver = true;
 
+          let mySound = new Audio('../sound/car-accident-with-squeal-and-crash-6054.mp3')
+          mySound.play()
           const gameOver = document.createElement("div");
           gameOver.id = "game-over-frame";
           this.background.appendChild(gameOver);
