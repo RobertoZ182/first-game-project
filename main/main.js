@@ -7,6 +7,7 @@ class Player{
         this.domElement = null;
         this.createDomElement();
         this.coins = 0;
+        this.meters = 0;
     }
     createDomElement(){
         
@@ -66,7 +67,7 @@ class Obstacles{
     createDomElement(){
         const cars = ["images/imgbin-lamborghini-gallardo-car-2012-lamborghini-aventador-lamborghini-engine-6GzEa3QyjneP9J6rULuv0NH7V-removebg-preview.png","images/lovepik-car-3d-model-png-image_401910823_wh300-removebg-preview.png"];
         this.domElement = document.createElement("img");
-        this.domElement.setAttribute("src", cars[Math.floor(Math.random() * 2)]);
+        this.domElement.setAttribute("src", cars[Math.floor(Math.random() * cars.length)]);
         this.domElement.className = "obstacle";
         this.domElement.style.height = this.height + "vh";
         this.domElement.style.width = this.width + "vw";
@@ -114,30 +115,80 @@ class Coins{
     }
 }
 
+class TrafficObstacle{
+  constructor(){
+  this.height = 10;
+  this.width = 10;
+  this.positionX = 80;
+  this.positionY = Math.floor(Math.random() * 26);
+  this.domElement = null;
+  this.createDomElement();
+  }
+  createDomElement(){
+    this.domElement = document.createElement("img");
+    this.domElement.setAttribute("src", "images/pngtree-cartoon-anti-collision-column-png-download-image_1257142-removebg-preview.png");
+    this.domElement.className = "trafficObs";
+    this.domElement.style.height = this.height + "vh";
+    this.domElement.style.width = this.width + "vw";
+    this.domElement.style.bottom = this.positionY + "vh";
+    this.domElement.style.left = this.positionX + "vw";
+    this.domElement.style.objectFit = "contain"
+
+    const board = document.getElementById("board");
+    board.appendChild(this.domElement);
+}
+  moveToLeft(){
+  this.positionX -= 2;
+  this.domElement.style.left = this.positionX + "vw";
+  }
+
+}
+
 class Game {
   constructor() {
     this.player = new Player();
     this.obstacles = [];
     this.coins = [];
+    this.trafficOb = []
     this.backgroundX = 0;
     this.background = document.getElementById("board");
+    this.bar = null;
     this.main = null;
     this.secondary = null;
+    this.third = null;
     this.score = null;
+    this.metersScore = null;
+    this.gameIsOver = false;
   }
   start() {
     this.attachEventListeners();
 
-    
-    this.showScore();
+    this.gameIsOver = false;
+
+    this.bar = document.getElementById("bar");
+
+    this.metersScore = document.createElement("div");
+    this.metersScore.className = "viewer";
+    this.bar.appendChild(this.metersScore);
+
+    this.score = document.createElement("div");
+    this.score.className = "viewer";
+    this.bar.appendChild(this.score);
+
+    this.third = setInterval(() => {
+      const coin = new Coins();
+      this.coins.push(coin);
+    }, 4500);
 
     this.secondary = setInterval(() => {
       const obstacle = new Obstacles();
       this.obstacles.push(obstacle);
-      const coin = new Coins();
-      this.coins.push(coin);
-      this.updateCar();
-    }, 4000);
+    }, 3000);
+
+    this.fourth = setInterval(() => {
+      const traffic = new TrafficObstacle();
+      this.trafficOb.push(traffic);
+    }, 5000)
 
     this.main = setInterval(() => {
       // move obstacles
@@ -147,29 +198,44 @@ class Game {
         this.detectCollision(elem, "obstacle");
       });
 
+      //move traffic
+      this.trafficOb.forEach((obs) => {
+        obs.moveToLeft();
+        this.removeElementIfOutside(obs, this.trafficOb);
+        this.detectCollision(obs, "traffic");
+      })
+
       // move coins
       this.coins.forEach((coi) => {
         coi.moveToLeft();
         this.removeElementIfOutside(coi, this.coins);
         this.detectCollision(coi, "coin");
+        
       });
 
       //move background
       this.backgroundX -= 1;
       this.background.style.backgroundPosition = this.backgroundX + "vw 0";
-    }, 100);
+
+      //other features
+      this.showMeters();
+      this.showCollCoins();
+      this.updateCar();
+    }, 60);
   }
   attachEventListeners() {
     document.addEventListener("keydown", (event) => {
-      if (event.code === "ArrowLeft") {
-        this.player.moveLeft();
-      } else if (event.code === "ArrowRight") {
-        this.player.moveRight();
-      } else if (event.code === "ArrowUp") {
-        this.player.moveUp();
-      } else if (event.code === "ArrowDown") {
-        this.player.moveDown();
-      }
+    if(this.gameIsOver === false){
+             if (event.code === "ArrowLeft") {
+          this.player.moveLeft();
+        } else if (event.code === "ArrowRight") {
+          this.player.moveRight();
+        } else if (event.code === "ArrowUp") {
+          this.player.moveUp();
+        } else if (event.code === "ArrowDown") {
+          this.player.moveDown();
+        }
+    }
     });
   }
   removeElementIfOutside(elementInstance, arrayOfElements) {
@@ -192,77 +258,76 @@ class Game {
 
       if(element === "coin"){
           this.player.coins++;
-          console.log(this.player.coins);
           obstacleInstance.domElement.remove();
+          this.coins.shift();
       } else if(element === "obstacle"){
           console.log(null);
           clearInterval(this.main);
           clearInterval(this.secondary);
+          clearInterval(this.third);
+          clearInterval(this.fourth);
+          this.gameIsOver = true;
+
           const gameOver = document.createElement("div");
-          gameOver.style.width = "50vw";
-          gameOver.style.height = "40vh";
-          gameOver.style.borderRadius = "30px";
-          gameOver.style.border = "3px solid red";
-          gameOver.style.backgroundColor = "white";
-          gameOver.style.margin = "0 auto";
-          gameOver.style.display = "flex";
-          gameOver.style.justifyContent = "space-around";
-          gameOver.style.flexDirection = "column";
-          gameOver.style.alignItems = "center";
+          gameOver.id = "game-over-frame";
           this.background.appendChild(gameOver);
+
           const gameOverText = document.createElement("h1");
-          gameOverText.style.fontSize = "50px";
-          gameOverText.style.color = "red";
-          gameOverText.style.margin = "0 auto 20px";
+          gameOverText.id = "game-over-heading";
           gameOverText.innerText = "GameOver!!";
           gameOver.appendChild(gameOverText);
+
           const button = document.createElement("button");
-          button.style.width = "8vw";
-          button.style.height = "3vh";
-          button.style.backgroundColor = "red";
-          button.style.border = "none";
-          button.style.margin = "0 auto";
-          button.style.color = "white";
-          button.style.borderRadius = "10px";
+          button.id = "game-over-button";
           button.innerText = "Try again";
           button.addEventListener("click", () =>{
             location.href = "index.html";
           })
           gameOver.appendChild(button);
-          
+
+     } else if(element === "traffic"){
+        this.player.coins -= 3;
+        obstacleInstance.domElement.remove();
+        this.trafficOb.shift();
      }
     }
   }
-  stop(){
-
-  }
   updateCar() {
-
-    if (this.player.coins++) {
       const arr = ["./images/2343.png_300-removebg-preview.png","./images/b28111e7702dbaa633a1bb3a11a5b549.png_wh300-removebg-preview.png","./images/lovepik-sports-car-3d-model-png-image_401910830_wh300-removebg-preview.png","./images/lovepik-cool-sports-car-png-image_401180390_wh300-removebg-preview.png"];
-      this.player.domElement.setAttribute("src", arr[Math.floor(Math.random() * arr.length)]);
+    if (this.player.coins === 10) {
+    
+      this.player.domElement.setAttribute("src", arr[0]);
+    } else if(this.player.coins === 20){
+      this.player.domElement.setAttribute("src", arr[1]);
+    } else if(this.player.coins === 30){
+      this.player.domElement.setAttribute("src", arr[2]);
+    } else if(this.player.coins === 40){
+      this.player.domElement.setAttribute("src", arr[3]);
+    } else if(this.player.coins === 50){
+      const gameOver = document.createElement("div");
+      gameOver.id = "game-over-frame";
+      this.background.appendChild(gameOver);
+
+      const gameOverText = document.createElement("h1");
+      gameOverText.id = "game-over-heading";
+      gameOverText.innerText = "Well Done!";
+      gameOver.appendChild(gameOverText);
+
+      const button = document.createElement("button");
+      button.id = "game-over-button";
+      button.innerText = "Go back home";
+      button.addEventListener("click", () =>{
+        location.href = "index.html";
+      })
+      gameOver.appendChild(button);
     }
   }
-  showScore(){
-    this.score = document.createElement("div");
-    this.score.style.width = "50vw";
-    this.score.style.height = "5vh";
-    this.score.style.border = "3px solid white";
-    this.score.style.backgroundColor = "black";
-    this.score.style.margin = "5vh auto";
-    this.score.style.borderRadius = "20px";
-    this.score.style.display = "flex";
-    this.score.style.flexDirection = "row";
-    this.score.style.justifyContent = "center";
-    this.score.style.alignItems = "center";
-    document.body.appendChild(this.score);
-      if(this.player.coins >= 10){
-        const star = document.createElement("img");
-        star.setAttribute("src", "../images/pngtree-vector-complex-star-icon-png-image_4183954-removebg-preview.png");
-        star.style.width = "5vw";
-        star.style.height = "5vh";
-        this.score.appendChild(star);
-      }
+  showCollCoins(){
+      this.score.innerText = this.player.coins;
+  }
+  showMeters(){
+    this.player.meters += 1;
+    this.metersScore.innerText = this.player.meters + "m";
   }
 }
 
