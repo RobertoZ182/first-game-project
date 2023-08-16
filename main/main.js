@@ -283,7 +283,7 @@ class Game {
           button.id = "game-over-button";
           button.innerText = "Try again";
           button.addEventListener("click", () =>{
-            location.href = "index.html";
+            location.href = "game.html";
           })
           gameOver.appendChild(button);
 
