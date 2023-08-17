@@ -178,12 +178,12 @@ class Game {
     this.third = setInterval(() => {
       const coin = new Coins();
       this.coins.push(coin);
-    }, 4500);
+    }, 2000);
 
     this.secondary = setInterval(() => {
       const obstacle = new Obstacles();
       this.obstacles.push(obstacle);
-    }, 3000);
+    }, 6000);
 
     this.fourth = setInterval(() => {
       const traffic = new TrafficObstacle();
@@ -221,7 +221,7 @@ class Game {
       this.showMeters();
       this.showCollCoins();
       this.updateCar();
-    }, 60);
+    }, 50);
   }
   attachEventListeners() {
     document.addEventListener("keydown", (event) => {
@@ -260,6 +260,8 @@ class Game {
           this.player.coins++;
           obstacleInstance.domElement.remove();
           this.coins.shift();
+          let mySoundCoin = new Audio('../sound/sound/mixkit-bonus-earned-in-video-game-2058.wav');
+          mySoundCoin.play();
       } else if(element === "obstacle"){
           console.log(null);
           clearInterval(this.main);
@@ -291,37 +293,49 @@ class Game {
         this.player.coins -= 3;
         obstacleInstance.domElement.remove();
         this.trafficOb.shift();
+        const mySoundTraffic = new Audio("../sound/mixkit-8-bit-lose-2031.wav");
+        mySoundTraffic.play();
      }
     }
   }
   updateCar() {
       const arr = ["./images/2343.png_300-removebg-preview.png","./images/b28111e7702dbaa633a1bb3a11a5b549.png_wh300-removebg-preview.png","./images/lovepik-sports-car-3d-model-png-image_401910830_wh300-removebg-preview.png","./images/lovepik-cool-sports-car-png-image_401180390_wh300-removebg-preview.png"];
     if (this.player.coins === 10) {
-    
       this.player.domElement.setAttribute("src", arr[0]);
+      let mySoundCar = new Audio("../sound/mixkit-arcade-retro-jump-223.wav");
+      mySoundCar.play();
     } else if(this.player.coins === 20){
       this.player.domElement.setAttribute("src", arr[1]);
+      let mySoundCar = new Audio("../sound/mixkit-arcade-retro-jump-223.wav");
+      mySoundCar.play();
     } else if(this.player.coins === 30){
       this.player.domElement.setAttribute("src", arr[2]);
+      let mySoundCar = new Audio("../sound/mixkit-arcade-retro-jump-223.wav");
+      mySoundCar.play();
     } else if(this.player.coins === 40){
       this.player.domElement.setAttribute("src", arr[3]);
+      let mySoundCar = new Audio("../sound/mixkit-arcade-retro-jump-223.wav");
+      mySoundCar.play();
     } else if(this.player.coins === 50){
       const gameOver = document.createElement("div");
-      gameOver.id = "game-over-frame";
+      gameOver.id = "finished-frame";
       this.background.appendChild(gameOver);
 
       const gameOverText = document.createElement("h1");
-      gameOverText.id = "game-over-heading";
+      gameOverText.id = "finished-heading";
       gameOverText.innerText = "Well Done!";
       gameOver.appendChild(gameOverText);
 
       const button = document.createElement("button");
-      button.id = "game-over-button";
+      button.id = "finished-button";
       button.innerText = "Go back home";
       button.addEventListener("click", () =>{
         location.href = "index.html";
       })
       gameOver.appendChild(button);
+
+      let mySoundCar = new Audio("../sound/mixkit-casino-bling-achievement-2067.wav");
+      mySoundCar.play();
     }
   }
   showCollCoins(){
