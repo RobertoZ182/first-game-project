@@ -184,7 +184,6 @@ class Game {
     this.secondary = setInterval(() => {
       const obstacle = new Obstacles();
       this.obstacles.push(obstacle);
-      this.updateCar();
     }, 6000);
 
     this.fourth = setInterval(() => {
@@ -285,6 +284,7 @@ class Game {
           this.player.coins++;
           obstacleInstance.domElement.remove();
           this.coins.shift();
+          this.updateCar();
           let mySoundCoin = new Audio('./sound/mixkit-bonus-earned-in-video-game-2058.wav');
           mySoundCoin.play();
       } else if(element === "obstacle"){
