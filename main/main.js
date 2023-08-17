@@ -6,7 +6,7 @@ class Player{
         this.positionY = 10;
         this.domElement = null;
         this.createDomElement();
-        this.coins = 8;
+        this.coins = 0;
         this.meters = 0;
     }
     createDomElement(){
@@ -29,27 +29,27 @@ class Player{
     }
     moveLeft(){
         if(this.positionX !== 0){
-            this.positionX -= 1; 
+            this.positionX -= 2; 
             this.domElement.style.left = this.positionX + "vw";  
         }
     }
     moveRight(){
         if(this.positionX !== 70){
-            this.positionX += 1;
+            this.positionX += 2;
             this.domElement.style.left = this.positionX + "vw";   
         }
 
     }
     moveUp(){
         if(this.positionY !== 26){
-            this.positionY += 1;
+            this.positionY += 2;
             this.domElement.style.bottom = this.positionY + "vh";
          }
     }
 
     moveDown(){
         if(this.positionY !== 0){
-            this.positionY -= 1;
+            this.positionY -= 2;
             this.domElement.style.bottom = this.positionY + "vh";
         }
     }            
@@ -225,10 +225,18 @@ class Game {
       
     }, 50);
   }
-  attachEventListeners() {
+  attachEventListeners() {  
+
+    let keys = {
+      up: false,
+      down: false,
+      left: false,
+      right: false
+    }; 
+
     document.addEventListener("keydown", (event) => {
     if(this.gameIsOver === false){
-             if (event.code === "ArrowLeft") {
+          if (event.code === "ArrowLeft") {
           this.player.moveLeft();
         } else if (event.code === "ArrowRight") {
           this.player.moveRight();
@@ -237,8 +245,23 @@ class Game {
         } else if (event.code === "ArrowDown") {
           this.player.moveDown();
         }
-    }
+      }
+    
     });
+
+    if(keys.up && keys.right){
+      this.player.moveUp();
+      this.player.moveRight();
+    } else if(keys.up && keys.left){
+      this.player.moveUp();
+      this.player.moveLeft();
+    } else if(keys.down && keys.left){
+      this.player.moveDown();
+      this.player.moveLeft();
+    } else if(keys.down && keys.right){
+      this.player.moveDown();
+      this.player.moveRight();
+    }
   }
   removeElementIfOutside(elementInstance, arrayOfElements) {
     if (elementInstance.positionX <= 0) {
