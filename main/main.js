@@ -6,7 +6,7 @@ class Player{
         this.positionY = 10;
         this.domElement = null;
         this.createDomElement();
-        this.coins = 0;
+        this.coins = 48;
         this.meters = 0;
     }
     createDomElement(){
@@ -326,21 +326,20 @@ class Game {
     }
   }
   updateCar() {
-      const arr = ["./images/2343.png_300-removebg-preview.png","./images/b28111e7702dbaa633a1bb3a11a5b549.png_wh300-removebg-preview.png","./images/lovepik-sports-car-3d-model-png-image_401910830_wh300-removebg-preview.png","./images/lovepik-cool-sports-car-png-image_401180390_wh300-removebg-preview.png"];
     if (this.player.coins === 10) {
-      this.player.domElement.setAttribute("src", arr[0]);
+      this.player.domElement.setAttribute("src", "./images/2343.png_300-removebg-preview.png");
       let mySoundCar = new Audio("./sound/mixkit-arcade-retro-jump-223.wav");
       mySoundCar.play();
     } else if(this.player.coins === 20){
-      this.player.domElement.setAttribute("src", arr[1]);
+      this.player.domElement.setAttribute("src", "./images/b28111e7702dbaa633a1bb3a11a5b549.png_wh300-removebg-preview.png");
       let mySoundCar = new Audio("./sound/mixkit-arcade-retro-jump-223.wav");
       mySoundCar.play();
     } else if(this.player.coins === 30){
-      this.player.domElement.setAttribute("src", arr[2]);
+      this.player.domElement.setAttribute("src", "./images/lovepik-sports-car-3d-model-png-image_401910830_wh300-removebg-preview.png");
       let mySoundCar = new Audio("./sound/mixkit-arcade-retro-jump-223.wav");
       mySoundCar.play();
     } else if(this.player.coins === 40){
-      this.player.domElement.setAttribute("src", arr[3]);
+      this.player.domElement.setAttribute("src", "./images/lovepik-cool-sports-car-png-image_401180390_wh300-removebg-preview.png");
       let mySoundCar = new Audio("./sound/mixkit-arcade-retro-jump-223.wav");
       mySoundCar.play();
     } else if(this.player.coins === 50){
