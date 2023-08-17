@@ -156,6 +156,7 @@ class Game {
     this.main = null;
     this.secondary = null;
     this.third = null;
+    this.fourth = null;
     this.score = null;
     this.metersScore = null;
     this.gameIsOver = false;
@@ -183,6 +184,7 @@ class Game {
     this.secondary = setInterval(() => {
       const obstacle = new Obstacles();
       this.obstacles.push(obstacle);
+      this.updateCar();
     }, 6000);
 
     this.fourth = setInterval(() => {
@@ -220,7 +222,7 @@ class Game {
       //other features
       this.showMeters();
       this.showCollCoins();
-      this.updateCar();
+      
     }, 50);
   }
   attachEventListeners() {
@@ -260,10 +262,9 @@ class Game {
           this.player.coins++;
           obstacleInstance.domElement.remove();
           this.coins.shift();
-          let mySoundCoin = new Audio('../sound/sound/mixkit-bonus-earned-in-video-game-2058.wav');
+          let mySoundCoin = new Audio('../sound/mixkit-bonus-earned-in-video-game-2058.wav');
           mySoundCoin.play();
       } else if(element === "obstacle"){
-          console.log(null);
           clearInterval(this.main);
           clearInterval(this.secondary);
           clearInterval(this.third);
@@ -280,14 +281,40 @@ class Game {
           gameOverText.id = "game-over-heading";
           gameOverText.innerText = "GameOver!!";
           gameOver.appendChild(gameOverText);
-
+          
           const button = document.createElement("button");
           button.id = "game-over-button";
           button.innerText = "Try again";
           button.addEventListener("click", () =>{
             location.href = "game.html";
-          })
+          });
           gameOver.appendChild(button);
+
+          this.metersScore = document.createElement("div");
+          this.metersScore.className = "viewer";
+          const scoreMeters = document.createElement("h1");
+          const heading1 = document.createElement("h1");          
+          this.metersScore.appendChild(heading1);
+          this.metersScore.appendChild(scoreMeters);
+          heading1.style.fontSize = "50px";
+          heading1.style.color = "red";
+          heading1.style.fontFamily = "Poppins";
+          heading1.innerText = "Distance";
+          scoreMeters.innerText =  this.player.meters;
+          gameOver.appendChild(this.metersScore);
+      
+          this.score = document.createElement("div");
+          this.score.className = "viewer";
+          const scoreCoins = document.createElement("h1");
+          const heading2 = document.createElement("h1");
+          this.score.appendChild(heading2);
+          this.score.appendChild(scoreCoins);
+          heading2.style.fontSize = "50px";
+          heading2.style.color = "red";
+          heading2.style.fontFamily = "Poppins";
+          heading2.innerText = "Coins:"
+          scoreCoins.innerText =  this.player.coins;
+          gameOver.appendChild(this.score);
 
      } else if(element === "traffic"){
         this.player.coins -= 3;
@@ -317,6 +344,11 @@ class Game {
       let mySoundCar = new Audio("../sound/mixkit-arcade-retro-jump-223.wav");
       mySoundCar.play();
     } else if(this.player.coins === 50){
+      clearInterval(this.main);
+      clearInterval(this.secondary);
+      clearInterval(this.third);
+      clearInterval(this.fourth);
+      this.gameIsOver = true;
       const gameOver = document.createElement("div");
       gameOver.id = "finished-frame";
       this.background.appendChild(gameOver);

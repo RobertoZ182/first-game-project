@@ -21,7 +21,7 @@ body{
     justify-content: space-between;
     align-items: center;
     flex-direction: column;
-    gap: 10vh;
+    gap: 5vh;
     margin: 10vh auto;
     width: 50vw;
     height: 60vh;
@@ -38,7 +38,8 @@ body{
     font-style: italic;
     font-weight: bold;
     text-shadow: 2px 5px 10px red;
-    margin-top: 5vh;
+    background-color: black;
+    color: white;
 }
 #start button{
     background-color: red;
@@ -57,4 +58,11 @@ body{
 
 #start button:active{
     transform: scale(0.9);
+}
+
+#desc{
+    font-size: 40px; 
+    text-shadow: 2px 5px 10px red;
+    font-style: italic;
+    text-decoration: wavy;
 }
