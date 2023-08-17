@@ -6,7 +6,7 @@ class Player{
         this.positionY = 10;
         this.domElement = null;
         this.createDomElement();
-        this.coins = 48;
+        this.coins = 8;
         this.meters = 0;
     }
     createDomElement(){
