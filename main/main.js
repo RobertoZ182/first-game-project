@@ -262,7 +262,7 @@ class Game {
           this.player.coins++;
           obstacleInstance.domElement.remove();
           this.coins.shift();
-          let mySoundCoin = new Audio('../sound/mixkit-bonus-earned-in-video-game-2058.wav');
+          let mySoundCoin = new Audio('./sound/mixkit-bonus-earned-in-video-game-2058.wav');
           mySoundCoin.play();
       } else if(element === "obstacle"){
           clearInterval(this.main);
@@ -271,7 +271,7 @@ class Game {
           clearInterval(this.fourth);
           this.gameIsOver = true;
 
-          let mySound = new Audio('../sound/car-accident-with-squeal-and-crash-6054.mp3')
+          let mySound = new Audio('./sound/car-accident-with-squeal-and-crash-6054.mp3')
           mySound.play()
           const gameOver = document.createElement("div");
           gameOver.id = "game-over-frame";
@@ -320,7 +320,7 @@ class Game {
         this.player.coins -= 3;
         obstacleInstance.domElement.remove();
         this.trafficOb.shift();
-        const mySoundTraffic = new Audio("../sound/mixkit-8-bit-lose-2031.wav");
+        const mySoundTraffic = new Audio("./sound/mixkit-8-bit-lose-2031.wav");
         mySoundTraffic.play();
      }
     }
@@ -329,19 +329,19 @@ class Game {
       const arr = ["./images/2343.png_300-removebg-preview.png","./images/b28111e7702dbaa633a1bb3a11a5b549.png_wh300-removebg-preview.png","./images/lovepik-sports-car-3d-model-png-image_401910830_wh300-removebg-preview.png","./images/lovepik-cool-sports-car-png-image_401180390_wh300-removebg-preview.png"];
     if (this.player.coins === 10) {
       this.player.domElement.setAttribute("src", arr[0]);
-      let mySoundCar = new Audio("../sound/mixkit-arcade-retro-jump-223.wav");
+      let mySoundCar = new Audio("./sound/mixkit-arcade-retro-jump-223.wav");
       mySoundCar.play();
     } else if(this.player.coins === 20){
       this.player.domElement.setAttribute("src", arr[1]);
-      let mySoundCar = new Audio("../sound/mixkit-arcade-retro-jump-223.wav");
+      let mySoundCar = new Audio("./sound/mixkit-arcade-retro-jump-223.wav");
       mySoundCar.play();
     } else if(this.player.coins === 30){
       this.player.domElement.setAttribute("src", arr[2]);
-      let mySoundCar = new Audio("../sound/mixkit-arcade-retro-jump-223.wav");
+      let mySoundCar = new Audio("./sound/mixkit-arcade-retro-jump-223.wav");
       mySoundCar.play();
     } else if(this.player.coins === 40){
       this.player.domElement.setAttribute("src", arr[3]);
-      let mySoundCar = new Audio("../sound/mixkit-arcade-retro-jump-223.wav");
+      let mySoundCar = new Audio("./sound/mixkit-arcade-retro-jump-223.wav");
       mySoundCar.play();
     } else if(this.player.coins === 50){
       clearInterval(this.main);
@@ -366,7 +366,7 @@ class Game {
       })
       gameOver.appendChild(button);
 
-      let mySoundCar = new Audio("../sound/mixkit-casino-bling-achievement-2067.wav");
+      let mySoundCar = new Audio("./sound/mixkit-casino-bling-achievement-2067.wav");
       mySoundCar.play();
     }
   }
